@@ -51,8 +51,7 @@ if object_collection.show:
 if user := object_collection.save:
     try:
         save_pwd.save_data(user, password)
-    except:
-        raise KeyError("Input a <user_account> for the password") from Exception
-
+    except Exception as error:
+        print(error)
 
 
