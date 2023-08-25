@@ -6,6 +6,12 @@ import string
 # This class generate helps to us to generate properties 
 # that allowed to us to save our password, encryp it an so more
 class Generator:
+    ''' Generator
+
+    This is the class who generates the passwords and return new one
+    for that you can access to `generate` method.
+
+    '''
     def __init__(self, length = 10):
         self.length = length
 

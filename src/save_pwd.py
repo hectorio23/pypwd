@@ -3,6 +3,7 @@ from src.configure_pypswd import PATH
 import pickle
 
 def save_data(company, data):
+    '''This function only save de password'''
     try:
         passwords = {}
         with open(f'{PATH}', 'rb+') as binary_file:
@@ -18,10 +19,12 @@ def save_data(company, data):
                 data_save = {company:data}
                 pickle.dump(data_save, binary_file)
 
-# This function do two thing, read and print the values saved
-# on the file or delete one item from it, the objetive with This
-# function is not repeat code
 def load_data(mode = 'read', item = None):
+    '''
+    This function do two things, read and print the values saved
+    on the file or delete one item from it, the objetive with This
+    function is not repeat code
+    '''
     try:
         temp_data = None
         with open(f'{PATH}', 'rb') as binary_file:
