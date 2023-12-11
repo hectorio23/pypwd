@@ -9,7 +9,7 @@ import sys
 parser = argparse.ArgumentParser(
     prog="pypswd",
     description="Manager of password",
-    epilog="Don't with yours passwords  "
+    epilog="Don't worry about your password, this program will generates it for youº"
 )
 
 parser.add_argument('-p', '--print')
