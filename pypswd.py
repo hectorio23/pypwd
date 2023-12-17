@@ -8,15 +8,15 @@ import sys
 # Argument object
 parser = argparse.ArgumentParser(
     prog="pypswd",
-    description="Manager of password",
-    epilog="Don't worry about your password, this program will generates it for youº"
+    description="A Terminal Password Manager Utility",
+    epilog="Your worry-free password manager – this program can generate, display, and manage your passwords securely."
 )
 
-parser.add_argument('-p', '--print')
-parser.add_argument('-d', '--delete')
-parser.add_argument('-l'  , '--length', type=int)
-parser.add_argument('-s', '--show')
-parser.add_argument('-sv', '--save')
+parser.add_argument('-p', '--print', action='store_true', help='Print a generated password.')
+parser.add_argument('-d', '--delete', action='store_true', help='Delete a stored password entry.')
+parser.add_argument('-l', '--length', type=int, help='Specify the length of the generated password.')
+parser.add_argument('-s', '--show', action='store_true', help='Display stored passwords.')
+parser.add_argument('-sv', '--save', type=str, help='Save a new password entry.')
 
 
 # ZONE OF VARIABLES
@@ -38,6 +38,7 @@ if item_delete := object_collection.delete:
 # input user
 if length := object_collection.length:
     password = Generator(length).generate
+    print(password)
 
 # Show data by the terminal
 if object_collection.show:
@@ -53,5 +54,3 @@ if user := object_collection.save:
         save_pwd.save_data(user, password)
     except Exception as error:
         print(error)
-
-
