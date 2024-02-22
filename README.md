@@ -12,7 +12,7 @@ Make sure you have Python 3.x installed on your system. The program consists of 
 + -**l**, **--length**: Generate a random password of the specified length.
 + **-p**, **--print**: Print all stored passwords.
 + **-d**, **--delete**: Delete a specific password associated with an account or + company.
-+ -**s**, **--show**: Show the generated password.
++ -**e**, **--export**: Export the file password to another directory in other format
 + -**sv**, **--save**: Save the generated password for a user or company.
 
 ```shell

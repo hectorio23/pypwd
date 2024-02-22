@@ -1,5 +1,8 @@
+# Author: Héctor Adán
+# https://github.com/hectorio23
 # /bin/python3.11
-from src.main import Generator      
+from src.export import export_as  
+from src.main import Generator    
 from src import save_pwd
 import argparse
 import sys
@@ -9,14 +12,15 @@ import sys
 parser = argparse.ArgumentParser(
     prog="pypswd",
     description="A Terminal Password Manager Utility",
-    epilog="Your worry-free password manager – this program can generate, display, and manage your passwords securely."
+    epilog="Your worry-free password manager - this program can generate, display, and manage your passwords securely."
 )
 
+# Zone of parameters
 parser.add_argument('-p', '--print', action='store_true', help='Print a generated password.')
-parser.add_argument('-d', '--delete', action='store_true', help='Delete a stored password entry.')
+parser.add_argument('-d', '--delete', help='Delete a stored password entry.')
 parser.add_argument('-l', '--length', type=int, help='Specify the length of the generated password.')
-parser.add_argument('-s', '--show', action='store_true', help='Display stored passwords.')
 parser.add_argument('-sv', '--save', type=str, help='Save a new password entry.')
+parser.add_argument('-e', '--export', type=str, help='Export password\'s files')
 
 
 # ZONE OF VARIABLES
@@ -40,10 +44,6 @@ if length := object_collection.length:
     password = Generator(length).generate
     print(password)
 
-# Show data by the terminal
-if object_collection.show:
-    print(password)
-
 # Save the data in a binary file 
 # with the sintax key -> value (yes, a dictonary in Python)
 # If the user don't input nothing in this section, it raises an error
@@ -54,3 +54,7 @@ if user := object_collection.save:
         save_pwd.save_data(user, password)
     except Exception as error:
         print(error)
+    
+if export_path := object_collection.export:
+    print(export_path)
+    export_as(export_path)
