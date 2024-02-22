@@ -1,5 +1,4 @@
 # /bin/python3.11
-import src.formats.jsonf, src.formats.txtf
 from src.configure_pypswd import PATH
 from src.save_pwd import load_data
 import pickle
