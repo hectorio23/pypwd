@@ -1,0 +1,2 @@
+[console_scripts]
+pypswd = pypswd:__main__

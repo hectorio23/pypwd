@@ -1,0 +1,7 @@
+README.md
+setup.py
+pypswd.egg-info/PKG-INFO
+pypswd.egg-info/SOURCES.txt
+pypswd.egg-info/dependency_links.txt
+pypswd.egg-info/entry_points.txt
+pypswd.egg-info/top_level.txt
