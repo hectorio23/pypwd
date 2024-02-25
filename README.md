@@ -12,8 +12,8 @@ Make sure you have Python 3.x installed on your system. The program consists of 
 + -**l**, **--length**: Generate a random password of the specified length.
 + **-p**, **--print**: Print all stored passwords.
 + **-d**, **--delete**: Delete a specific password associated with an account or + company.
-+ -**e**, **--export**: Export the file password to another directory in other format
 + -**sv**, **--save**: Save the generated password for a user or company.
++ -**e**, **--export**: Export the file password to another directory in other format
 
 ```shell
 ## For create a password for the moment
@@ -21,13 +21,16 @@ Make sure you have Python 3.x installed on your system. The program consists of 
 
 $ python pypwd.py [options]
 ```
+For example, if you want to show all the commands, specify the flag ´-h´ or ´--help´.
+![pypwd_help_example](./screenshots/pypwd_help_example.png)
 
-This is the other example who creates a password and print it on terminal 
+This is anther example who creates a password and print it on terminal 
 
 ```bash
 python pypwd.py --length 23 
 ```
-<sub>Actully is not necessary specify the show flag because the generator raises on console the password</sub>
+![pypwd_length_example](./screenshots/pypwd_length_example.png)
+<sub>Actully is not necessary specify the print ´-p´ flag because the generator raises on console the password</sub>
 
 ## Executing
 
