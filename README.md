@@ -1,4 +1,6 @@
 # PYPWD Program Usage Guide
+(Only for linux)
+
 
 The `pypwd` program is a password manager tool written in Python that allows you to generate and manage passwords. It provides a command-line interface for various password-related operations.
 I it easier to install and easy to use, Don't worry where are your passwords, `pypwd` maneges all of them.
