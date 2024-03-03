@@ -10,7 +10,7 @@ import sys
 
 # Argument object
 parser = argparse.ArgumentParser(
-    prog="pypswd",
+    prog="pypwd",
     description="A Terminal Password Manager Utility",
     epilog="Your worry-free password manager - this program can generate, display, and manage your passwords securely."
 )
