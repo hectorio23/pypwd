@@ -16,6 +16,7 @@ Make sure you have Python 3.x installed on your system. The program consists of 
 + **-d**, **--delete**: Delete a specific password associated with an account or + company.
 + -**sv**, **--save**: Save the generated password for a user or company.
 + -**e**, **--export**: Export the file password to another directory in other format
++ -**r**, **--repeat**: Generates n the passwords and writes on the terminal  
 
 ```shell
 ## For create a password for the moment

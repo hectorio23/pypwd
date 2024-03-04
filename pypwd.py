@@ -21,6 +21,7 @@ parser.add_argument('-d', '--delete', help='Delete a stored password entry.')
 parser.add_argument('-l', '--length', type=int, help='Specify the length of the generated password.')
 parser.add_argument('-sv', '--save', type=str, help='Save a new password entry.')
 parser.add_argument('-e', '--export', type=str, help='Export password\'s files')
+parser.add_argument('-r', '--repeat', type=int, default=0, help='Generates n passwords')
 
 
 # ZONE OF VARIABLES
@@ -38,23 +39,32 @@ if object_collection.print:
 if item_delete := object_collection.delete:
     save_pwd.load_data('remove', item_delete)
     sys.exit()
-# The following zone is the comprobation of the 
-# input user
-if length := object_collection.length:
-    password = Generator(length).generate
-    print(password)
+
 
 # Save the data in a binary file 
 # with the sintax key -> value (yes, a dictonary in Python)
 # If the user don't input nothing in this section, it raises an error
 # notice him that he need to specify a user or company
 # for example: <user_account>: <user_password>
+
+if repeater := object_collection.repeat:
+    for item in range(repeater):
+        print(f"{ item + 1 } - ", Generator(object_collection.length).generate)
+# The following zone is the comprobation of the 
+# input user
+elif length := object_collection.length: 
+    password = Generator(length).generate
+    print(password)
+    
+if export_path := object_collection.export:
+    print(export_path)
+    export_as(export_path)
+
 if user := object_collection.save:
     try:
         save_pwd.save_data(user, password)
     except Exception as error:
         print(error)
-    
-if export_path := object_collection.export:
-    print(export_path)
-    export_as(export_path)
+
+
+
