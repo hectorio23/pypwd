@@ -2,22 +2,41 @@
 import random
 import string
 
-
-# This class generate helps to us to generate properties 
-# that allowed to us to save our password, encryp it an so more
 class Generator:
-    ''' Generator
+    ''' 
+    Class Generator:
+    This class generates passwords and returns new ones 
+    through the `generate` method.
 
-    This is the class who generates the passwords and return new one
-    for that you can access to `generate` method.
-
+    Attributes:
+    - length (int): The default length of the generated password.
+    
+    Methods:
+    - generate(length_password=0) -> str: 
+      Generates a password of the specified length.
     '''
+
     def __init__(self, length=10):
+        '''
+        Initializes a Generator object with a default length for generated passwords.
+
+        Args:
+        - length (int): The default length of the generated password.
+        '''
         self.length = length
 
-    # the main method, makes the perfect password
     @property
     def generate(self, length_password=0) -> str:
+        '''
+        Generates a password with the specified length.
+        
+        Args:
+        - length_password (int): The length of the generated password. 
+                                 If not provided, uses the default length.
+        
+        Returns:
+        - str: The generated password.
+        '''
         if length_password == 0:
             length_password = self.length
         
@@ -30,7 +49,7 @@ class Generator:
         random.shuffle(words)
         random.shuffle(symbols)
         
-        # Ajuste si la división no es exacta
+        # Adjust if division is not exact
         remainder = length_password - (num_letters + num_symbols)
         if remainder > 0:
             num_letters += remainder
@@ -43,7 +62,7 @@ class Generator:
         for _ in range(num_symbols):
             password += symbols.pop()
         
-        # Mezcla la contraseña para mayor seguridad
+        # Shuffle the password for added security
         password_list = list(password)
         random.shuffle(password_list)
         return ''.join(password_list)
