@@ -3,30 +3,59 @@ from src.configure_pypswd import PATH, ROUTE_FILE
 import os
 import pickle
 
-def save_data(company, data):
-    '''This function only saves the password'''
-    try:
+class DataHandler:
+
+    @staticmethod
+    def create_file():
+
+        os.makedirs(os.path.dirname(PATH), exist_ok=True)
+        print(f"Folder '{os.path.dirname(PATH)}' created successfully.")
+
+        # Create a new file with an empty dictionary
+        with open(PATH, 'wb+') as file:
+            pickle.dump({}, file)
+            print("File created successfully.")
+
+
+    @staticmethod
+    def save_data(company: str, data: str) -> None:
+        with open(PATH, 'wb') as binary_file:
+            data_save = {company: data}
+            pickle.dump(data_save, binary_file)
+        
+
+    @staticmethod
+    def load_data():
+        ...
+
+    @staticmethod
+    def query_data():
         # Try to open the file in binary read and write mode
         with open(PATH, 'rb+') as binary_file:
             try:
                 # Try to load existing data
                 data_file = pickle.load(binary_file)
+
             except EOFError:
                 # If no data exists, initialize with an empty dictionary
                 data_file = {}
-
-            # Add or update the password for the specified company
+            
             data_file[company] = data
+            print(data_file)
 
             # Return to the beginning of the file and write the updated data
             binary_file.seek(0)
             pickle.dump(data_file, binary_file)
 
+
+
+def save_data(company, data):
+    '''This function only saves the password'''
+    try:
+        data_file = DataHandler.query_data()
+
     except Exception as error:
-        # If there's an error, create a new file with the provided data
-        with open(PATH, 'wb') as binary_file:
-            data_save = {company: data}
-            pickle.dump(data_save, binary_file)
+        DataHandler.save_data(company, data)
 
 def load_data(mode='read', item=None):
     '''
@@ -46,13 +75,7 @@ def load_data(mode='read', item=None):
 
             # Create the directory and file if the user wants to proceed
             if choose.lower() in ("yes", "y"):
-                os.makedirs(os.path.dirname(PATH), exist_ok=True)
-                print(f"Folder '{os.path.dirname(PATH)}' created successfully.")
-
-                # Create a new file with an empty dictionary
-                with open(PATH, 'wb+') as file:
-                    pickle.dump({}, file)
-                    print("File created successfully.")
+                DataHandler.create_file()
                 return  # Exit the function after creating the directory and file
 
             else:
