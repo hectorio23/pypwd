@@ -35,7 +35,7 @@ if object_collection.print:
 
 # Check for the --delete option
 if item_delete := object_collection.delete:
-    save_pwd.load_data('remove', item_delete)
+    save_pwd.DataHandler.delete_element(item_delete)
     sys.exit()
 
 # Generate passwords based on the --repeat option

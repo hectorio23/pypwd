@@ -3,11 +3,29 @@ from src.configure_pypswd import PATH, ROUTE_FILE
 import os
 import pickle
 
-class DataHandler:
+
+# I'm come back
+
+class Formatter:
 
     @staticmethod
-    def create_file():
+    def json(content: dict):
+        counter = 1
+        for key, value in content.items():
+            print('[{}] {} ->     {} '.format(counter, key.ljust(12, ' '), value))
+            counter += 1
 
+
+class DataHandler:
+    ''' Class DataHandler
+    The main porpouse of this class is the 
+    magnament of the users data, this class 
+    allowed to us to save and query the passwords.
+    '''
+    @staticmethod
+    def create_file():
+        
+        # Crate the folerd's file 
         os.makedirs(os.path.dirname(PATH), exist_ok=True)
         print(f"Folder '{os.path.dirname(PATH)}' created successfully.")
 
@@ -18,15 +36,11 @@ class DataHandler:
 
 
     @staticmethod
-    def save_data(company: str, data: str) -> None:
-        with open(PATH, 'wb') as binary_file:
-            data_save = {company: data}
+    def data_saver(company: str, data: str, data_save={ }) -> None:
+        with open(PATH, 'rb+') as binary_file:
+            data_save[company] = data
             pickle.dump(data_save, binary_file)
         
-
-    @staticmethod
-    def load_data():
-        ...
 
     @staticmethod
     def query_data():
@@ -40,73 +54,41 @@ class DataHandler:
                 # If no data exists, initialize with an empty dictionary
                 data_file = {}
             
-            data_file[company] = data
-            print(data_file)
+        return data_file
 
-            # Return to the beginning of the file and write the updated data
-            binary_file.seek(0)
-            pickle.dump(data_file, binary_file)
+    
+    @staticmethod
+    def delete_element(key):
+        elements = DataHandler.query_data()
+        elements.pop(key, None)
+
+        with open(PATH, 'wb') as storage:
+            pickle.dump(elements, storage)
+
+        print("Element deleted successfully")
 
 
 
 def save_data(company, data):
     '''This function only saves the password'''
     try:
-        data_file = DataHandler.query_data()
+        user_content = DataHandler.query_data()
+        DataHandler.data_saver(company, data, user_content)
 
     except Exception as error:
-        DataHandler.save_data(company, data)
+        print("Estoy pasando por aqui")
+        DataHandler.data_saver(company, data)
+
 
 def load_data(mode='read', item=None):
-    '''
-    This function does two things: reads and prints the values saved
-    on the file or deletes one item from it. The objective with this
-    function is to avoid code repetition.
-    '''
     try:
-        temp_data = None
+        response = DataHandler.query_data()
+    except:
+        DataHandler.create_file()
+        response = DataHandler.query_data()
 
-        # Check if the file exists
-        if not os.path.exists(PATH):
-            print("The file doesn't exist.")
+    Formatter.json(response)
 
-            # Ask the user if they want to create a new one
-            choose = input("Do you want to create a new one? (Y/N): ")
-
-            # Create the directory and file if the user wants to proceed
-            if choose.lower() in ("yes", "y"):
-                DataHandler.create_file()
-                return  # Exit the function after creating the directory and file
-
-            else:
-                print(":(")
-                return  # Exit the function if the user chooses not to create the directory and file
-
-        # The file exists, proceed with reading or deleting
-        with open(PATH, 'rb') as binary_file:
-            if mode == 'read':
-
-                # Print the values if the mode is 'read'
-                data = pickle.load(binary_file).items()
-                for key, value in data:
-                    print('\t {} ->     {} '.format(key.ljust(12, ' '), value))
-            else:
-                # Remove the data stored in the item (it's a key, in fact)
-                # if the item has something stored
-                data_from_file = pickle.load(binary_file)
-                if item and (response := data_from_file.pop(item, None)):
-                    temp_data = data_from_file
-                else:
-                    print("Something was wrong, the item there is not in the collection")
-
-        # Write the modified data back to the file
-        if temp_data:
-            with open(PATH, 'wb') as file:
-                pickle.dump(temp_data, file)
-                print("Data deleted successfully")
-
-    except Exception as error:
-        print(f"Error: {error}")
 
 # Example usage
 # save_data('company_a', 'password123')  # Save a password (uncomment to test)
