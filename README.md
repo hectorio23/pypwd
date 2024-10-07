@@ -1,57 +1,58 @@
-# PYPWD Program Usage Guide
-(Only for UNIX systems)
+Entendido. Aquí está la guía con el prefijo "" para evitar que el navegador lo interprete como markdown:
 
+---
 
-The `pypwd` program is a password manager tool written in Python that allows you to generate and manage passwords. It provides a command-line interface for various password-related operations.
-I it easier to install and easy to use, Don't worry where are your passwords, `pypwd` maneges all of them.
+# PYPWD Program Usage Guide  
+(For UNIX systems only)
+
+The `pypwd` program is a Python-based password manager that allows you to generate and manage passwords with ease. It offers a command-line interface to perform various password-related operations.  
+Installation is straightforward, and using it is simple—`pypwd` takes care of managing all your passwords.
 
 ## Getting Started
 
-Make sure you have Python 3.x installed on your system. The program consists of modules such as `Generator`, `save_pwd`, and `argparse`.
+Ensure you have Python 3.x installed on your system. The program includes modules such as `Generator`, `save_pwd`, and `argparse`.
 
 ## Usage
 
-+ -**l**, **--length**: Generate a random password of the specified length.
-+ **-p**, **--print**: Print all stored passwords.
-+ **-d**, **--delete**: Delete a specific password associated with an account or + company.
-+ -**sv**, **--save**: Save the generated password for a user or company.
-+ -**e**, **--export**: Export the file password to another directory in other format
-+ -**r**, **--repeat**: Generates n the passwords and writes on the terminal  
+- **-l**, **--length**: Generate a random password of the specified length.  
+- **-p**, **--print**: Display all stored passwords.  
+- **-d**, **--delete**: Delete a specific password associated with an account or company.  
+- **-sv**, **--save**: Save the generated password for a user or company.  
+- **-e**, **--export**: Export the passwords to another directory in a different format.  
+- **-r**, **--repeat**: Generate multiple passwords and display them in the terminal.
 
 ```shell
-## For create a password for the moment
-## You need to write somethng like here
+# To generate a password instantly
+# Use a command like this:
 
 $ python pypwd.py [options]
 ```
-For example, if you want to show all the commands, specify the flag ´-h´ or ´--help´.
+
+For example, to display all available commands, use the `-h` or `--help` flag.  
 ![pypwd_help_example](./screenshots/pypwd_help_example.png)
 
-This is anther example who creates a password and print it on terminal 
+Here is another example that generates a password and prints it in the terminal:  
 
 ```bash
 python pypwd.py --length 23 
 ```
 ![pypwd_length_example](./screenshots/pypwd_length_example.png)
-<sub>Actully is not necessary specify the print ´-p´ flag because the generator raises on console the password</sub>
+<sub>Note: It's not necessary to specify the `-p` flag because the password will be displayed in the terminal by default after generation.</sub>
 
-## Executing
+## Installation
 
-For the moment you can install it using the pip command, the sintax will change
-depends of your work envoriment.
-In <span style="color:#0f94d2;">Arch Linux</span> you can install it using the following instructions.
+For now, you can install it using the `pip` command. The syntax may vary depending on your environment.
+
+On <span style="color:#0f94d2;">Arch Linux</span>, you can install it using the following command:
 
 ```bash
 sudo pacman -S python-pyspwd
 ```
 
-Where `pyspwd` is the packet you want to install.
-IF you don't install you can use stablished an alias or if you prefer 
-you are able to write the following code in the end of you bash/fish/zsh/.. . 
-For example, on fish you can write:
+Where `pyspwd` is the package to be installed.  
+If you choose not to install it globally, you can set an alias or add the following to the end of your shell configuration file (e.g., `.bashrc`, `.zshrc`, or `.config/fish/config.fish`).  
+For instance, in Fish, you can write:
 
 ```shell
-alias pypswd "python /$HOME/user/your_directory/pypswd/pypswd.py"
+alias pypswd="python $HOME/user/your_directory/pypswd/pypswd.py"
 ```
-
-
