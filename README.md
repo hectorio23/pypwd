@@ -1,7 +1,3 @@
-Entendido. Aquí está la guía con el prefijo "" para evitar que el navegador lo interprete como markdown:
-
----
-
 # PYPWD Program Usage Guide  
 (For UNIX systems only)
 
