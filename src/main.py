@@ -1,68 +1,37 @@
 # /bin/python3.11
 import random
-import string
 
 class Generator:
-    ''' 
-    Class Generator:
-    This class generates passwords and returns new ones 
-    through the `generate` method.
-
-    Attributes:
-    - length (int): The default length of the generated password.
+    ''' Class Generator:
+    This class makes the hard wor for you!.
+    just slices the password's size by 3 and generates
+    letters, symbols and digits for security.
     
-    Methods:
-    - generate(length_password=0) -> str: 
-      Generates a password of the specified length.
+    - size: the unique param you need!
     '''
 
-    def __init__(self, length=10):
-        '''
-        Initializes a Generator object with a default length for generated passwords.
+    def __init__(self, size=10):
+        self.size = size
+        self.numbers = "1234567890"
+        self.string = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        self.symbols = r"!\"#$%&'()*+,-/:;<=>?@[\]^_`{|}~"
 
-        Args:
-        - length (int): The default length of the generated password.
-        '''
-        self.length = length
+    def return_numbers(self, length):
+        return [random.choice(self.numbers) for _ in range(1, length + 1)]
+
+    def return_string(self, length):
+        return [random.choice(self.string) for _ in range(1, length + 1)]
+
+    def return_symbols(self, length):
+        return [random.choice(self.symbols) for _ in range(1, length + 1)]
+
 
     @property
-    def generate(self, length_password=0) -> str:
-        '''
-        Generates a password with the specified length.
-        
-        Args:
-        - length_password (int): The length of the generated password. 
-                                 If not provided, uses the default length.
-        
-        Returns:
-        - str: The generated password.
-        '''
-        if length_password == 0:
-            length_password = self.length
-        
-        num_symbols = length_password // 3
-        num_letters = (length_password - num_symbols) // 2
-        
-        words = list(string.ascii_lowercase + string.ascii_uppercase)
-        symbols = list(string.punctuation)
-        
-        random.shuffle(words)
-        random.shuffle(symbols)
-        
-        # Adjust if division is not exact
-        remainder = length_password - (num_letters + num_symbols)
-        if remainder > 0:
-            num_letters += remainder
-        
-        password = ''
-        
-        for _ in range(num_letters):
-            password += words.pop()
-        
-        for _ in range(num_symbols):
-            password += symbols.pop()
-        
-        # Shuffle the password for added security
-        password_list = list(password)
-        random.shuffle(password_list)
-        return ''.join(password_list)
+    def generate(self) -> str:
+        calc = self.size // 3
+
+        data =  self.return_numbers(calc) + self.return_string(calc) + self.return_symbols(calc + 1)
+        random.shuffle(data)
+        return "".join(element for element in data)
+
+
