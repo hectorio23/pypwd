@@ -1,8 +1,6 @@
 {
     "path" : "/home/USER/.local/pypswd",
     "filename": "secrets",
-    "extension": "bin"
+    "extension": "bin",
+    "default_format":"json" 
 }
-
-
-

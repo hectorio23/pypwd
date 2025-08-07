@@ -1,13 +1,9 @@
 # /bin/python3.11
-from src.configure_pypswd import PATH, ROUTE_FILE
-import os
+from src.env import PATH  
 import pickle
-
-
-# I'm come back
+import os
 
 class Formatter:
-
     @staticmethod
     def json(content: dict):
         counter = 1
@@ -43,16 +39,20 @@ class DataHandler:
         
 
     @staticmethod
-    def query_data():
+    def query_data(flag=False):
         # Try to open the file in binary read and write mode
         with open(PATH, 'rb+') as binary_file:
             try:
                 # Try to load existing data
                 data_file = pickle.load(binary_file)
 
+                if data_file == { } and command:
+                    print("UPSS There's nothing here yet! ")
+
             except EOFError:
                 # If no data exists, initialize with an empty dictionary
                 data_file = {}
+                # print("UPSS There's nothing here yet! ")
             
         return data_file
 
@@ -76,7 +76,6 @@ def save_data(company, data):
         DataHandler.data_saver(company, data, user_content)
 
     except Exception as error:
-        print("Estoy pasando por aqui")
         DataHandler.data_saver(company, data)
 
 

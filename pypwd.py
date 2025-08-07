@@ -2,7 +2,6 @@
 # https://github.com/hectorio23
 # /bin/python3.11
 
-# Import necessary modules
 from src.export import export_as  
 from src.main import Generator    
 from src import save_pwd
