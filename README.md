@@ -14,7 +14,7 @@ Ensure you have Python 3.x installed on your system. The program includes module
 - **-p**, **--print**: Display all stored passwords.  
 - **-d**, **--delete**: Delete a specific password associated with an account or company.  
 - **-sv**, **--save**: Save the generated password for a user or company.  
-- **-e**, **--export**: Export the passwords to another directory in a different format.  
+- **-e**, **--export**: Export the passwords to another directory in a different format (json, xml, yaml, txt).  
 - **-r**, **--repeat**: Generate multiple passwords and display them in the terminal.
 
 ```shell
