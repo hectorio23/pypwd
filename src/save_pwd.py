@@ -1,7 +1,7 @@
 # /bin/python3.11
 from src.env import PATH  
-import pickle
 import os
+from src.encryption import encrypt_passwords, decrypt_passwords, get_master_password, setup_master_password
 
 class Formatter:
     @staticmethod
@@ -21,70 +21,104 @@ class DataHandler:
     @staticmethod
     def create_file():
         
-        # Crate the folerd's file 
+        # Create the folder's file 
         os.makedirs(os.path.dirname(PATH), exist_ok=True)
         print(f"Folder '{os.path.dirname(PATH)}' created successfully.")
 
-        # Create a new file with an empty dictionary
-        with open(PATH, 'wb+') as file:
-            pickle.dump({}, file)
-            print("File created successfully.")
+        # Setup master password for first-time users
+        master_password = setup_master_password()
+        
+        # Create a new file with encrypted empty dictionary
+        encrypted_data = encrypt_passwords({}, master_password)
+        with open(PATH, 'w') as file:
+            file.write(encrypted_data)
+            print("Encrypted file created successfully.")
 
 
     @staticmethod
-    def data_saver(company: str, data: str, data_save={ }) -> None:
-        with open(PATH, 'rb+') as binary_file:
-            data_save[company] = data
-            pickle.dump(data_save, binary_file)
+    def data_saver(company: str, data: str, data_save={ }, master_password: str = None) -> None:
+        if master_password is None:
+            master_password = get_master_password()
+        
+        data_save[company] = data
+        encrypted_data = encrypt_passwords(data_save, master_password)
+        
+        with open(PATH, 'w') as file:
+            file.write(encrypted_data)
         
 
     @staticmethod
-    def query_data(flag=False):
-        # Try to open the file in binary read and write mode
-        with open(PATH, 'rb+') as binary_file:
-            try:
-                # Try to load existing data
-                data_file = pickle.load(binary_file)
-
-                if data_file == { } and command:
-                    print("UPSS There's nothing here yet! ")
-
-            except EOFError:
-                # If no data exists, initialize with an empty dictionary
-                data_file = {}
-                # print("UPSS There's nothing here yet! ")
+    def query_data(master_password: str = None):
+        """Load and decrypt password data."""
+        if master_password is None:
+            master_password = get_master_password()
+        
+        try:
+            with open(PATH, 'r') as file:
+                encrypted_data = file.read()
             
-        return data_file
+            # Decrypt the data
+            data_file = decrypt_passwords(encrypted_data, master_password)
+            
+            if data_file == {}:
+                print("There's nothing here yet!")
+            
+            return data_file
+            
+        except FileNotFoundError:
+            print("Password file not found. This appears to be your first time using PYPWD!")
+            print("Please run: python pypwd.py --setup")
+            print("This will help you set up your master password.")
+            return {}
+        except Exception as e:
+            if "Decryption failed" in str(e):
+                print("Wrong master password! Please try again.")
+                print("If you forgot your master password, you'll need to start over.")
+                print("Run: python pypwd.py --setup (this will reset all passwords)")
+            else:
+                print(f"Error loading passwords: {e}")
+            return {}
 
     
     @staticmethod
-    def delete_element(key):
-        elements = DataHandler.query_data()
+    def delete_element(key, master_password: str = None):
+        if master_password is None:
+            master_password = get_master_password()
+            
+        elements = DataHandler.query_data(master_password)
         elements.pop(key, None)
 
-        with open(PATH, 'wb') as storage:
-            pickle.dump(elements, storage)
+        # Re-encrypt and save the updated data
+        encrypted_data = encrypt_passwords(elements, master_password)
+        with open(PATH, 'w') as storage:
+            storage.write(encrypted_data)
 
         print("Element deleted successfully")
 
 
 
-def save_data(company, data):
+def save_data(company, data, master_password: str = None):
     '''This function only saves the password'''
     try:
-        user_content = DataHandler.query_data()
-        DataHandler.data_saver(company, data, user_content)
+        if master_password is None:
+            master_password = get_master_password()
+            
+        user_content = DataHandler.query_data(master_password)
+        DataHandler.data_saver(company, data, user_content, master_password)
 
     except Exception as error:
-        DataHandler.data_saver(company, data)
+        print(f"Error saving password: {error}")
+        DataHandler.data_saver(company, data, master_password=master_password)
 
 
-def load_data(mode='read', item=None):
+def load_data(mode='read', item=None, master_password: str = None):
     try:
-        response = DataHandler.query_data()
+        if master_password is None:
+            master_password = get_master_password()
+        response = DataHandler.query_data(master_password)
     except:
         DataHandler.create_file()
-        response = DataHandler.query_data()
+        response = DataHandler.query_data(master_password)
 
     Formatter.json(response)
 

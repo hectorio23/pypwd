@@ -33,5 +33,3 @@ class Generator:
         data =  self.return_numbers(calc) + self.return_string(calc) + self.return_symbols(calc + 1)
         random.shuffle(data)
         return "".join(element for element in data)
-
-

@@ -16,16 +16,25 @@ parser = argparse.ArgumentParser(
 )
 
 # Define command-line arguments
-parser.add_argument('-p', '--print', action='store_true', help='Print a generated password.')
+parser.add_argument('-p', '--print', action='store_true', help='Print all stored passwords.')
 parser.add_argument('-d', '--delete', help='Delete a stored password entry.')
 parser.add_argument('-l', '--length', type=int, help='Specify the length of the generated password.')
 parser.add_argument('-sv', '--save', type=str, help='Save a new password entry.')
 parser.add_argument('-e', '--export', type=str, help='Export password files')
 parser.add_argument('-r', '--repeat', type=int, default=0, help='Generates n passwords')
+parser.add_argument('--setup', action='store_true', help='Setup master password for first-time users')
 
 # Parse command-line arguments
 object_collection = parser.parse_args()
 password = ""
+
+# Check for the --setup option
+if object_collection.setup:
+    print("Setting up PYPWD for the first time...")
+    print("You'll need to create a master password to encrypt your passwords.")
+    print("This password will be required every time you use PYPWD.\n")
+    save_pwd.DataHandler.create_file()
+    sys.exit()
 
 # Check for the --print option
 if object_collection.print:

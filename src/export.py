@@ -1,7 +1,7 @@
 # /bin/python3.11
 from src.env import PATH               # Import the path of the password file
-from src.save_pwd import load_data     # Import the load_data function from the save_pwd module
-import pickle                          # Import the pickle module for serialization
+from src.save_pwd import DataHandler   # Import the DataHandler class
+from src.encryption import get_master_password, decrypt_passwords
 from src.Formatter import *
 from pathlib import Path
 
@@ -31,8 +31,11 @@ def export_as(new_path=r'./default.txt') -> None:
         return
 
     try:
-        with open(PATH, 'rb') as binary_file:
-            content = pickle.load(binary_file)
+        # Get master password for decryption
+        master_password = get_master_password()
+        
+        # Load and decrypt the password data
+        content = DataHandler.query_data(master_password)
 
         exporter = PasswordExporter(exporters[extension])
 
