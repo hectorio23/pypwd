@@ -2,13 +2,10 @@
 import random
 
 class Generator:
-    ''' Class Generator:
-    This class makes the hard wor for you!.
-    just slices the password's size by 3 and generates
-    letters, symbols and digits for security.
-    
-    - size: the unique param you need!
-    '''
+    """
+    Password generator that creates secure random passwords.
+    Divides password length by 3 and generates letters, symbols, and digits.
+    """
 
     def __init__(self, size=10):
         self.size = size
@@ -28,8 +25,9 @@ class Generator:
 
     @property
     def generate(self) -> str:
+        """Generate a random password with balanced character distribution."""
         calc = self.size // 3
 
-        data =  self.return_numbers(calc) + self.return_string(calc) + self.return_symbols(calc + 1)
+        data = self.return_numbers(calc) + self.return_string(calc) + self.return_symbols(calc + 1)
         random.shuffle(data)
-        return "".join(element for element in data)
+        return "".join(data)

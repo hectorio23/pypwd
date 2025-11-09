@@ -13,30 +13,27 @@ class Formatter:
 
 
 class DataHandler:
-    ''' Class DataHandler
-    The main porpouse of this class is the 
-    magnament of the users data, this class 
-    allowed to us to save and query the passwords.
-    '''
+    """
+    Handles password data storage and retrieval operations.
+    Manages encrypted password file operations including save, query, and delete.
+    """
     @staticmethod
     def create_file():
-        
-        # Create the folder's file 
+        """Initialize encrypted password storage file and set up master password."""
         os.makedirs(os.path.dirname(PATH), exist_ok=True)
         print(f"Folder '{os.path.dirname(PATH)}' created successfully.")
 
-        # Setup master password for first-time users
         master_password = setup_master_password()
-        
-        # Create a new file with encrypted empty dictionary
         encrypted_data = encrypt_passwords({}, master_password)
+        
         with open(PATH, 'w') as file:
             file.write(encrypted_data)
-            print("Encrypted file created successfully.")
+        print("Encrypted file created successfully.")
 
 
     @staticmethod
     def data_saver(company: str, data: str, data_save={ }, master_password: str = None) -> None:
+        """Save password data to encrypted storage."""
         if master_password is None:
             master_password = get_master_password()
         
@@ -82,13 +79,13 @@ class DataHandler:
     
     @staticmethod
     def delete_element(key, master_password: str = None):
+        """Delete a password entry from storage."""
         if master_password is None:
             master_password = get_master_password()
             
         elements = DataHandler.query_data(master_password)
         elements.pop(key, None)
 
-        # Re-encrypt and save the updated data
         encrypted_data = encrypt_passwords(elements, master_password)
         with open(PATH, 'w') as storage:
             storage.write(encrypted_data)
@@ -98,7 +95,7 @@ class DataHandler:
 
 
 def save_data(company, data, master_password: str = None):
-    '''This function only saves the password'''
+    """Save a password entry for the given company/service."""
     try:
         if master_password is None:
             master_password = get_master_password()
@@ -112,6 +109,7 @@ def save_data(company, data, master_password: str = None):
 
 
 def load_data(mode='read', item=None, master_password: str = None):
+    """Load and display all stored passwords."""
     try:
         if master_password is None:
             master_password = get_master_password()

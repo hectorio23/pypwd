@@ -7,16 +7,13 @@ from pathlib import Path
 
 
 def export_as(new_path=r'./default.txt') -> None:
-    '''
-    Export passwords in various formats from the binary file.
-
+    """
+    Export passwords in various formats.
+    
     Args:
-    - new_path (str): Destination file path.
-    - default_format (str): One of ['json', 'txt', 'xml', 'yaml']
-
-    Returns:
-    - None
-    '''
+        new_path: Destination file path. Format is determined by file extension.
+                  Supported formats: json, txt, xml, yaml
+    """
     exporters = {
         '.json': JsonExporter(),
         '.txt': TxtExporter(),
@@ -27,20 +24,16 @@ def export_as(new_path=r'./default.txt') -> None:
     extension = Path(new_path).suffix.lower()
 
     if extension not in exporters:
-        print(f"[-] Formatt not supported!: { extension }")
+        print(f"[-] Format not supported: {extension}")
         return
 
     try:
-        # Get master password for decryption
         master_password = get_master_password()
-        
-        # Load and decrypt the password data
         content = DataHandler.query_data(master_password)
 
         exporter = PasswordExporter(exporters[extension])
-
         exporter.export(content, new_path)
 
     except Exception as err:
-        print(f"[-] Has been an error for exporting: {err}")
+        print(f"[-] Export error: {err}")
 

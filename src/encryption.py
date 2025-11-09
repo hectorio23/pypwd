@@ -7,12 +7,11 @@ Implements AES-256 encryption with PBKDF2 key derivation.
 import os
 import base64
 import getpass
+import json
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.backends import default_backend
-from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-import json
 
 
 class EncryptionManager:
@@ -30,14 +29,12 @@ class EncryptionManager:
         if os.path.exists(self.salt_file):
             with open(self.salt_file, 'rb') as f:
                 return f.read()
-        else:
-            # Generate a new random salt
-            salt = os.urandom(32)  # 256-bit salt
-            with open(self.salt_file, 'wb') as f:
-                f.write(salt)
-            # Set restrictive permissions on salt file
-            os.chmod(self.salt_file, 0o600)
-            return salt
+        
+        salt = os.urandom(32)
+        with open(self.salt_file, 'wb') as f:
+            f.write(salt)
+        os.chmod(self.salt_file, 0o600)
+        return salt
     
     def _derive_key(self, master_password: str) -> bytes:
         """
@@ -51,16 +48,16 @@ class EncryptionManager:
         """
         kdf = PBKDF2HMAC(
             algorithm=hashes.SHA256(),
-            length=32,  # 256 bits
+            length=32,
             salt=self.salt,
-            iterations=100000,  # High iteration count for security
+            iterations=100000,
             backend=default_backend()
         )
         return kdf.derive(master_password.encode('utf-8'))
     
     def encrypt_data(self, data: dict, master_password: str) -> str:
         """
-        Encrypt password data using AES-256.
+        Encrypt password data using AES-256 in CBC mode.
         
         Args:
             data: Dictionary containing password data
@@ -70,25 +67,17 @@ class EncryptionManager:
             Base64 encoded encrypted data
         """
         key = self._derive_key(master_password)
-        
-        # Convert data to JSON string
         json_data = json.dumps(data).encode('utf-8')
-        
-        # Generate random IV
         iv = os.urandom(16)
         
-        # Create cipher
         cipher = Cipher(algorithms.AES(key), modes.CBC(iv), backend=default_backend())
         encryptor = cipher.encryptor()
         
-        # Pad data to block size (16 bytes for AES)
+        # PKCS7 padding: pad to 16-byte block boundary
         padding_length = 16 - (len(json_data) % 16)
         padded_data = json_data + bytes([padding_length] * padding_length)
         
-        # Encrypt data
         encrypted_data = encryptor.update(padded_data) + encryptor.finalize()
-        
-        # Combine IV and encrypted data, then encode
         combined = iv + encrypted_data
         return base64.b64encode(combined).decode('utf-8')
     
@@ -105,49 +94,25 @@ class EncryptionManager:
         """
         try:
             key = self._derive_key(master_password)
-            
-            # Decode base64 data
             combined = base64.b64decode(encrypted_data.encode('utf-8'))
             
-            # Separate IV and encrypted data
             iv = combined[:16]
             encrypted = combined[16:]
             
-            # Create cipher
             cipher = Cipher(algorithms.AES(key), modes.CBC(iv), backend=default_backend())
             decryptor = cipher.decryptor()
             
-            # Decrypt data
             decrypted_padded = decryptor.update(encrypted) + decryptor.finalize()
             
-            # Remove padding
+            # Remove PKCS7 padding
             padding_length = decrypted_padded[-1]
             decrypted_data = decrypted_padded[:-padding_length]
             
-            # Convert back to dictionary
             return json.loads(decrypted_data.decode('utf-8'))
             
         except Exception as e:
             raise ValueError(f"Decryption failed. Check your master password: {e}")
     
-    def verify_master_password(self, master_password: str) -> bool:
-        """
-        Verify if the provided master password is correct.
-        
-        Args:
-            master_password: Password to verify
-            
-        Returns:
-            True if password is correct, False otherwise
-        """
-        try:
-            # Try to decrypt with the provided password
-            # If it fails, the password is wrong
-            return True  # This will be implemented when we have encrypted data
-        except:
-            return False
-
-
 def get_master_password() -> str:
     """
     Securely prompt user for master password.
