@@ -111,7 +111,7 @@ class EncryptionManager:
             return json.loads(decrypted_data.decode('utf-8'))
             
         except Exception as e:
-            raise ValueError(f"Decryption failed. Check your master password: {e}")
+            raise ValueError(f"[-] Decryption failed. Check your master password: {e}")
     
 def get_master_password() -> str:
     """
@@ -131,17 +131,17 @@ def setup_master_password() -> str:
         Confirmed master password
     """
     while True:
-        password1 = getpass.getpass("Set master password: ")
-        password2 = getpass.getpass("Confirm master password: ")
+        password1 = getpass.getpass("[+] Set master password: ")
+        password2 = getpass.getpass("[+] Confirm master password: ")
         
         if password1 == password2:
             if len(password1) < 8:
-                print("Master password must be at least 8 characters long.")
+                print("[x] Master password must be at least 8 characters long.")
                 continue
-            print("Master password set successfully!")
+            print("[+] Master password set successfully!")
             return password1
         else:
-            print("Passwords don't match. Try again.")
+            print("[x] Passwords don't match. Try again.")
 
 
 def encrypt_passwords(passwords: dict, master_password: str) -> str:

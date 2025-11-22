@@ -13,7 +13,7 @@ class JsonExporter(ExporterStrategy):
     def export(self, content: dict, filename: str):
         with open(filename, "w") as f:
             json.dump(content, f, indent=4)
-        print(f"[✓] Exportado a {filename} (JSON)")
+        print(f"[+] Exported to {filename} (JSON)")
 
 
 class TxtExporter(ExporterStrategy):
@@ -21,7 +21,7 @@ class TxtExporter(ExporterStrategy):
         with open(filename, "w") as f:
             for i, (key, value) in enumerate(content.items(), 1):
                 f.write(f"[{i}] {key.ljust(12)} ->     {value}\n")
-        print(f"[✓] Exported to {filename} (TXT)")
+        print(f"[+] Exported to {filename} (TXT)")
 
 
 class XmlExporter:
@@ -37,7 +37,7 @@ class XmlExporter:
         self.indent(root)
         tree = ET.ElementTree(root)
         tree.write(filename, encoding="utf-8", xml_declaration=True)
-        print(f"[✓] Exported to {filename} (XML)")
+        print(f"[+] Exported to {filename} (XML)")
 
     def indent(self, elem, level=0):
         indent_str = "\n" + ("  " * level)
@@ -58,7 +58,7 @@ class YamlExporter(ExporterStrategy):
         with open(filename, "w") as f:
             for key, value in content.items():
                 f.write(f"{key}: {value}\n")
-        print(f"[✓] Exported to {filename} (YAML sintetic)")
+        print(f"[+] Exported to {filename} (YAML sintetic)")
 
 
 class PasswordExporter:
